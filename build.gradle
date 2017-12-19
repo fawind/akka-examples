@@ -1,0 +1,30 @@
+group 'de.hpi'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.google.inject:guice:4.1.+'
+    compile 'com.google.guava:guava:23.+'
+    compile 'com.beust:jcommander:1.72'
+
+    compile 'ch.qos.logback:logback-classic:1.2.+'
+    compile 'ch.qos.logback:logback-core:1.2.+'
+
+    compile 'com.typesafe.akka:akka-actor_2.11:2.5.3'
+    compile 'com.typesafe.akka:akka-remote_2.11:2.5.3'
+    compile 'com.typesafe.akka:akka-slf4j_2.11:2.5.3'
+    compile 'com.twitter:chill-akka_2.11:0.9.2'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.jukito:jukito:1.5'
+    testCompile 'org.assertj:assertj-core:3.8.+'
+    testCompile 'org.mockito:mockito-core:2.+'
+    testCompile 'com.typesafe.akka:akka-testkit_2.11:2.5.3'
+}
