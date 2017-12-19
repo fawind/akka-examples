@@ -1,7 +1,12 @@
 import com.beust.jcommander.JCommander;
+import com.google.common.collect.ImmutableList;
 import configuration.Commands.MasterCommand;
 import configuration.Commands.SlaveCommand;
+import model.Student;
+import model.StudentCsvReader;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.InvalidParameterException;
 
 import static java.lang.String.format;
@@ -39,7 +44,12 @@ public class Main {
         if (masterCommand.getPath() == null) {
             throw new InvalidParameterException("--path is required");
         }
-        System.out.println("Starting master");
+        try {
+            ImmutableList<Student> students = StudentCsvReader.fromCsv(Paths.get(masterCommand.getPath()));
+            System.out.println(students);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void startSlave(SlaveCommand slaveCommand) {
