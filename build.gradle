@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.inject:guice:4.1.+'
     compile 'com.google.guava:guava:23.+'
     compile 'com.beust:jcommander:1.72'
 
@@ -23,7 +22,6 @@ dependencies {
     compile 'com.twitter:chill-akka_2.11:0.9.2'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.jukito:jukito:1.5'
     testCompile 'org.assertj:assertj-core:3.8.+'
     testCompile 'org.mockito:mockito-core:2.+'
     testCompile 'com.typesafe.akka:akka-testkit_2.11:2.5.3'

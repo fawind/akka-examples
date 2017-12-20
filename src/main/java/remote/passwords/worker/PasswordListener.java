@@ -1,12 +1,13 @@
-package remote;
+package remote.passwords.worker;
 
 import akka.actor.AbstractLoggingActor;
 import akka.actor.PoisonPill;
 import akka.actor.Props;
 import com.google.common.collect.ImmutableList;
 import model.Student;
-import remote.messages.PasswordFoundMessage;
-import remote.messages.ShutdownMessage;
+import remote.Reaper;
+import remote.passwords.messages.PasswordFoundMessage;
+import remote.shared.ShutdownMessage;
 
 import java.util.HashMap;
 import java.util.Map;

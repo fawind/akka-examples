@@ -1,10 +1,10 @@
-package remote.scheduling;
+package remote.passwords;
 
 import akka.actor.ActorRef;
 import akka.routing.RoundRobinRoutingLogic;
 import akka.routing.Router;
 import com.google.common.collect.ImmutableSet;
-import remote.messages.PasswordRangeMessage;
+import remote.passwords.messages.PasswordRangeMessage;
 
 public class PasswordSchedulingStrategy {
 

@@ -1,4 +1,4 @@
-package remote.messages;
+package remote.passwords.messages;
 
 import com.google.common.collect.ImmutableSet;
 

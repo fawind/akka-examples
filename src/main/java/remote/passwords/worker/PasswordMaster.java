@@ -1,4 +1,4 @@
-package remote;
+package remote.passwords.worker;
 
 import akka.actor.AbstractLoggingActor;
 import akka.actor.ActorRef;
@@ -8,11 +8,12 @@ import akka.actor.Props;
 import akka.actor.SupervisorStrategy;
 import akka.actor.Terminated;
 import akka.japi.pf.DeciderBuilder;
-import remote.messages.PasswordFoundMessage;
-import remote.messages.PasswordHashListMessage;
-import remote.messages.PasswordRangeCompleted;
-import remote.messages.ShutdownMessage;
-import remote.scheduling.PasswordSchedulingStrategy;
+import remote.Reaper;
+import remote.passwords.messages.PasswordFoundMessage;
+import remote.passwords.messages.PasswordHashListMessage;
+import remote.passwords.messages.PasswordRangeCompleted;
+import remote.shared.ShutdownMessage;
+import remote.passwords.PasswordSchedulingStrategy;
 import scala.concurrent.duration.Duration;
 
 import java.util.concurrent.TimeUnit;
@@ -83,7 +84,6 @@ public class PasswordMaster extends AbstractLoggingActor {
     }
 
     private void handle(PasswordRangeCompleted message) {
-        log().warning("Range completed");
         schedulingStrategy.removeWorker(sender());
         if (hasFinished()) {
             stopSelfAndListener();

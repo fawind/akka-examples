@@ -4,12 +4,12 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.typesafe.config.Config;
 import model.Student;
-import remote.messages.PasswordHashListMessage;
+import remote.passwords.messages.PasswordHashListMessage;
+import remote.passwords.worker.PasswordListener;
+import remote.passwords.worker.PasswordMaster;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static utils.AkkaUtils.createRemoteAkkaConfig;
 
 public class PasswordCracker {
 

@@ -1,4 +1,4 @@
-package remote.messages;
+package remote.passwords.messages;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class PasswordRangeMessage implements Serializable {
+
     private final int startNumber;
     private final int endNumber;
     private final ImmutableSet<String> passwordHashes;

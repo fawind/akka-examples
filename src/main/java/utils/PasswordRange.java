@@ -8,12 +8,10 @@ public class PasswordRange implements Iterator<String> {
 
     private final static int PASSWORD_SIZE = 7;
 
-    private final int startNumber;
     private final int endNumber;
     private String current;
 
     public PasswordRange(int startNumber, int endNumber) {
-        this.startNumber = startNumber;
         this.endNumber = endNumber;
         this.current = numberToString(startNumber);
     }

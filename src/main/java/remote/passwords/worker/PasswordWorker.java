@@ -1,13 +1,14 @@
-package remote;
+package remote.passwords.worker;
 
 import akka.actor.AbstractLoggingActor;
 import akka.actor.Props;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.hash.Hashing;
-import remote.messages.PasswordFoundMessage;
-import remote.messages.PasswordRangeCompleted;
-import remote.messages.PasswordRangeMessage;
+import remote.Reaper;
+import remote.passwords.messages.PasswordFoundMessage;
+import remote.passwords.messages.PasswordRangeCompleted;
+import remote.passwords.messages.PasswordRangeMessage;
 import utils.PasswordRange;
 
 public class PasswordWorker extends AbstractLoggingActor {
@@ -47,6 +48,7 @@ public class PasswordWorker extends AbstractLoggingActor {
                     }
                 });
         getSender().tell(new PasswordRangeCompleted(), getSelf());
+        log().info("Finished hashes from {} to {}", message.getStartNumber(), message.getEndNumber());
     }
 
     private String getHash(String value) {

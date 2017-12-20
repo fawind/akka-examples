@@ -1,4 +1,4 @@
-package remote.messages;
+package remote.shared;
 
 import java.io.Serializable;
 
