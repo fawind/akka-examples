@@ -83,8 +83,8 @@ public class PasswordMaster extends AbstractLoggingActor {
     }
 
     private void handle(PasswordRangeCompleted message) {
-        schedulingStrategy.finished();
         log().warning("Range completed");
+        schedulingStrategy.removeWorker(sender());
         if (hasFinished()) {
             stopSelfAndListener();
         }
@@ -106,7 +106,7 @@ public class PasswordMaster extends AbstractLoggingActor {
     }
 
     private boolean hasFinished() {
-        return !schedulingStrategy.hasTasksInProgress() || schedulingStrategy.getNumberOfWorkers() <= 0;
+        return schedulingStrategy.getNumberOfWorkers() <= 0;
     }
 
     private void stopSelfAndListener() {

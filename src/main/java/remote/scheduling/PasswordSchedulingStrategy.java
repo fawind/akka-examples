@@ -13,7 +13,6 @@ public class PasswordSchedulingStrategy {
 	private final ActorRef master;
 	private Router workerRouter = new Router(new RoundRobinRoutingLogic());
 	private int numberOfWorkers = 0;
-	private int pendingTaskCount = 0;
 
 	public PasswordSchedulingStrategy(ActorRef master) {
 		this.master = master;
@@ -29,17 +28,8 @@ public class PasswordSchedulingStrategy {
 	        if (i == this.numberOfWorkers - 1) {
 	            endNumber = (int) maxPassword;
             }
-
             this.workerRouter.route(new PasswordRangeMessage(startNumber, endNumber, passwordHashes), this.master);
         }
-	}
-
-	public void finished() {
-	    pendingTaskCount--;
-	}
-
-	public boolean hasTasksInProgress() {
-	    return pendingTaskCount > 0;
 	}
 
 	public void addWorker(final ActorRef worker) {

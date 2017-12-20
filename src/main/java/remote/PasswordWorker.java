@@ -5,7 +5,6 @@ import akka.actor.Props;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.hash.Hashing;
-import org.jboss.netty.channel.socket.Worker;
 import remote.messages.PasswordFoundMessage;
 import remote.messages.PasswordRangeCompleted;
 import remote.messages.PasswordRangeMessage;

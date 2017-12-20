@@ -20,7 +20,7 @@ public class PasswordCracker {
         ActorSystem actorSystem = ActorSystem.create(DEFAULT_MASTER_SYSTEM_NAME, config);
 
         actorSystem.actorOf(Reaper.props(), Reaper.DEFAULT_NAME);
-        ActorRef listener = actorSystem.actorOf(PasswordListener.props(), PasswordListener.DEFAULT_NAME);
+        ActorRef listener = actorSystem.actorOf(PasswordListener.props(students), PasswordListener.DEFAULT_NAME);
         ActorRef master = actorSystem.actorOf(
                 PasswordMaster.props(listener, numLocalWorkers), PasswordMaster.DEFAULT_NAME);
 
