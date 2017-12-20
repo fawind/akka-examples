@@ -1,60 +1,60 @@
 import com.beust.jcommander.JCommander;
 import com.google.common.collect.ImmutableList;
-import configuration.Commands.MasterCommand;
-import configuration.Commands.SlaveCommand;
+import configuration.Commands.Parameters;
 import model.Student;
 import model.StudentCsvReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import remote.PasswordCracker;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.security.InvalidParameterException;
 
 import static java.lang.String.format;
 
 public class Main {
 
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
-        MasterCommand masterCommand = new MasterCommand();
-        SlaveCommand slaveCommand = new SlaveCommand();
+        Parameters parameters = new Parameters();
         JCommander commander = JCommander.newBuilder()
-                .addObject(masterCommand)
-                .addCommand("master", masterCommand)
-                .addCommand("slave", slaveCommand)
+                .addObject(parameters)
                 .build();
 
         commander.parse(args);
-        if (commander.getParsedCommand() == null) {
-            startMaster(masterCommand);
-        } else {
-            switch (commander.getParsedCommand()) {
-                case "master":
-                    startMaster(masterCommand);
-                    break;
-                case "slave":
-                    startSlave(slaveCommand);
-                    break;
-                default:
-                    throw new AssertionError(format("Invalid command: %s", commander.getParsedCommand()));
+        ImmutableList<Student> students = getStudents(parameters.getPath());
 
-            }
+        switch (parameters.getTask()) {
+            case PASSWORDS:
+                startPasswordCracker(parameters, students);
+                break;
+            case GENES:
+                startGeneAnalysis(parameters, students);
+                break;
+            case ALL:
+                startPasswordCracker(parameters, students);
+                startGeneAnalysis(parameters, students);
+                break;
+            default:
+                throw new AssertionError(format("Invalid task parameter: %s", parameters.getTask()));
         }
     }
 
-    private static void startMaster(MasterCommand masterCommand) {
-        if (masterCommand.getPath() == null) {
-            throw new InvalidParameterException("--path is required");
-        }
+    private static ImmutableList<Student> getStudents(String path) {
         try {
-            ImmutableList<Student> students = StudentCsvReader.fromCsv(Paths.get(masterCommand.getPath()));
-            PasswordCracker.runMaster(
-                    masterCommand.getHost(), masterCommand.getPort(), masterCommand.getNumLocalWorkers(), students);
+            return StudentCsvReader.fromCsv(Paths.get(path));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error parsing csv file for path {}", path, e);
+            throw new RuntimeException(e);
         }
     }
 
-    private static void startSlave(SlaveCommand slaveCommand) {
-        System.out.println("Starting slave");
+    private static void startPasswordCracker(Parameters parameters, ImmutableList<Student> students) {
+        PasswordCracker.runMaster(students, parameters.getNumLocalWorkers());
+    }
+
+    private static void startGeneAnalysis(Parameters parameters, ImmutableList<Student> students) {
+
     }
 }

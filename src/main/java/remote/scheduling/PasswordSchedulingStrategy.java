@@ -8,8 +8,6 @@ import remote.messages.PasswordRangeMessage;
 
 public class PasswordSchedulingStrategy {
 
-    private static final int PASSWORD_LENGTH = 7;
-
 	private final ActorRef master;
 	private Router workerRouter = new Router(new RoundRobinRoutingLogic());
 	private int numberOfWorkers = 0;
@@ -18,8 +16,8 @@ public class PasswordSchedulingStrategy {
 		this.master = master;
 	}
 
-	public void schedule(ImmutableSet<String> passwordHashes) {
-	    double maxPassword = Math.pow(10, PASSWORD_LENGTH) - 1;
+	public void schedule(ImmutableSet<String> passwordHashes, int passwordLength) {
+	    double maxPassword = Math.pow(10, passwordLength) - 1;
 	    int segmentLength = (int) Math.ceil(maxPassword / numberOfWorkers);
 
 	    for (int i = 0; i < numberOfWorkers; i++) {

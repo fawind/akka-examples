@@ -75,7 +75,7 @@ public class PasswordMaster extends AbstractLoggingActor {
     }
 
     private void handle(PasswordHashListMessage message) {
-       schedulingStrategy.schedule(message.getPasswordHashes());
+       schedulingStrategy.schedule(message.getPasswordHashes(), message.getMaxPasswordLength());
     }
 
     private void handle(PasswordFoundMessage message) {

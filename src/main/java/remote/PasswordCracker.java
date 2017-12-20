@@ -13,11 +13,11 @@ import static utils.AkkaUtils.createRemoteAkkaConfig;
 
 public class PasswordCracker {
 
+    private static final int MAX_PASSWORD_LENGTH = 7;
     private static final String DEFAULT_MASTER_SYSTEM_NAME = "PasswordMasterActorSystem";
 
-    public static void runMaster(String host, int port, int numLocalWorkers, ImmutableList<Student> students) {
-        Config config = createRemoteAkkaConfig(host, port);
-        ActorSystem actorSystem = ActorSystem.create(DEFAULT_MASTER_SYSTEM_NAME, config);
+    public static void runMaster(ImmutableList<Student> students, int numLocalWorkers) {
+        ActorSystem actorSystem = ActorSystem.create(DEFAULT_MASTER_SYSTEM_NAME);
 
         actorSystem.actorOf(Reaper.props(), Reaper.DEFAULT_NAME);
         ActorRef listener = actorSystem.actorOf(PasswordListener.props(students), PasswordListener.DEFAULT_NAME);
@@ -27,6 +27,6 @@ public class PasswordCracker {
         ImmutableSet<String> passwordHashes = students.stream()
                 .map(Student::getPasswordHash)
                 .collect(toImmutableSet());
-        master.tell(new PasswordHashListMessage(passwordHashes), ActorRef.noSender());
+        master.tell(new PasswordHashListMessage(passwordHashes, MAX_PASSWORD_LENGTH), ActorRef.noSender());
     }
 }
