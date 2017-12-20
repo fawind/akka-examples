@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.hash.Hashing;
 import org.jboss.netty.channel.socket.Worker;
 import remote.messages.PasswordFoundMessage;
+import remote.messages.PasswordRangeCompleted;
 import remote.messages.PasswordRangeMessage;
 import utils.PasswordRange;
 
@@ -46,6 +47,7 @@ public class PasswordWorker extends AbstractLoggingActor {
                         getSender().tell(new PasswordFoundMessage(number, hashedNumber), getSelf());
                     }
                 });
+        getSender().tell(new PasswordRangeCompleted(), getSelf());
     }
 
     private String getHash(String value) {

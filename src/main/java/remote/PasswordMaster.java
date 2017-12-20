@@ -10,6 +10,7 @@ import akka.actor.Terminated;
 import akka.japi.pf.DeciderBuilder;
 import remote.messages.PasswordFoundMessage;
 import remote.messages.PasswordHashListMessage;
+import remote.messages.PasswordRangeCompleted;
 import remote.messages.ShutdownMessage;
 import remote.scheduling.PasswordSchedulingStrategy;
 import scala.concurrent.duration.Duration;
@@ -32,7 +33,6 @@ public class PasswordMaster extends AbstractLoggingActor {
 
     private final ActorRef listener;
     private final PasswordSchedulingStrategy schedulingStrategy;
-    private boolean isAcceptingRequests = true;
 
     public PasswordMaster(ActorRef listener, int numLocalWorkers) {
         this.listener = listener;
@@ -67,6 +67,7 @@ public class PasswordMaster extends AbstractLoggingActor {
         return receiveBuilder()
                 .match(PasswordHashListMessage.class, this::handle)
                 .match(PasswordFoundMessage.class, this::handle)
+                .match(PasswordRangeCompleted.class, this::handle)
                 .match(ShutdownMessage.class, this::handle)
                 .match(Terminated.class, this::handle)
                 .matchAny(m -> log().info("{} received unknown message: {}", getClass().getName(), m))
@@ -74,23 +75,22 @@ public class PasswordMaster extends AbstractLoggingActor {
     }
 
     private void handle(PasswordHashListMessage message) {
-        if (!isAcceptingRequests) {
-            log().warning("Discarding request {}", message);
-            return;
-        }
        schedulingStrategy.schedule(message.getPasswordHashes());
     }
 
     private void handle(PasswordFoundMessage message) {
         listener.tell(message, getSelf());
+    }
+
+    private void handle(PasswordRangeCompleted message) {
         schedulingStrategy.finished();
+        log().warning("Range completed");
         if (hasFinished()) {
             stopSelfAndListener();
         }
     }
 
     private void handle(ShutdownMessage message) {
-        isAcceptingRequests = false;
         if (hasFinished()) {
             stopSelfAndListener();
         }
@@ -106,8 +106,7 @@ public class PasswordMaster extends AbstractLoggingActor {
     }
 
     private boolean hasFinished() {
-        return !isAcceptingRequests &&
-                (!schedulingStrategy.hasTasksInProgress() || schedulingStrategy.getNumberOfWorkers() <= 0);
+        return !schedulingStrategy.hasTasksInProgress() || schedulingStrategy.getNumberOfWorkers() <= 0;
     }
 
     private void stopSelfAndListener() {
