@@ -3,10 +3,11 @@ package remote;
 import akka.actor.AbstractLoggingActor;
 import akka.actor.Props;
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.hash.Hashing;
 import org.jboss.netty.channel.socket.Worker;
 import remote.messages.PasswordFoundMessage;
-import remote.messages.PasswordValidationMessage;
+import remote.messages.PasswordRangeMessage;
 import utils.PasswordRange;
 
 public class PasswordWorker extends AbstractLoggingActor {
@@ -30,17 +31,19 @@ public class PasswordWorker extends AbstractLoggingActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(PasswordValidationMessage.class, this::handle)
+                .match(PasswordRangeMessage.class, this::handle)
                 .matchAny(m -> this.log().info("%s received unknown message: %s", this.getClass().getName(), m))
                 .build();
     }
 
-    private void handle(PasswordValidationMessage message) {
+    private void handle(PasswordRangeMessage message) {
         this.log().info("Start checking hashes from %d to %d", message.getStartNumber(), message.getStartNumber());
+        ImmutableSet<String> passwordHashes = message.getPasswordHashes();
         new PasswordRange(message.getStartNumber(), message.getEndNumber())
                 .forEachRemaining(number -> {
-                    if (getHash(number).equals(message.getPasswordHash())) {
-                        this.getSender().tell(new PasswordFoundMessage(number), this.getSelf());
+                    String hashedNumber = getHash(number);
+                    if (passwordHashes.contains(hashedNumber)) {
+                        this.getSender().tell(new PasswordFoundMessage(number, hashedNumber), this.getSelf());
                     }
                 });
     }

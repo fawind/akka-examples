@@ -1,17 +1,19 @@
 package remote.messages;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-public class PasswordValidationMessage implements Serializable {
+public class PasswordRangeMessage implements Serializable {
     private final int startNumber;
     private final int endNumber;
-    private final String passwordHash;
+    private final ImmutableSet<String> passwordHashes;
 
-    public PasswordValidationMessage(int startNumber, int endNumber, String passwordHash) {
+    public PasswordRangeMessage(int startNumber, int endNumber, ImmutableSet<String> passwordHashes) {
         this.startNumber = startNumber;
         this.endNumber = endNumber;
-        this.passwordHash = passwordHash;
+        this.passwordHashes = passwordHashes;
     }
 
     public int getStartNumber() {
@@ -22,29 +24,29 @@ public class PasswordValidationMessage implements Serializable {
         return endNumber;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public ImmutableSet<String> getPasswordHashes() {
+        return passwordHashes;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PasswordValidationMessage that = (PasswordValidationMessage) o;
+        PasswordRangeMessage that = (PasswordRangeMessage) o;
         return startNumber == that.startNumber &&
                 endNumber == that.endNumber &&
-                Objects.equals(passwordHash, that.passwordHash);
+                Objects.equals(passwordHashes, that.passwordHashes);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(startNumber, endNumber, passwordHash);
+        return Objects.hash(startNumber, endNumber, passwordHashes);
     }
 
     @Override
     public String toString() {
-        return "PasswordValidationMessage{" +
+        return "PasswordRangeMessage{" +
                 "startNumber=" + startNumber +
                 ", endNumber=" + endNumber +
                 '}';
