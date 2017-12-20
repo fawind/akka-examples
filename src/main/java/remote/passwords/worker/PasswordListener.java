@@ -63,7 +63,7 @@ public class PasswordListener extends AbstractLoggingActor {
         StringBuilder stringBuilder = new StringBuilder("\nID, Name, Password");
         students.forEach(student -> {
             if (!hashToPassword.containsKey(student.getPasswordHash())) {
-                log().error("===> No password for {}, {}", student.getId(), student.getName());
+                log().error("No password for {}, {}", student.getId(), student.getName());
             }
             String password = hashToPassword.getOrDefault(student.getPasswordHash(), "No Password Found");
             stringBuilder.append(format("\n%d, %s, %s", student.getId(), student.getName(), password));
