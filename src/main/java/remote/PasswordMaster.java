@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PasswordMaster extends AbstractLoggingActor {
 
-    public static final String DEFAULT_NAME = "master";
+    public static final String DEFAULT_NAME = "password-master";
 
     public static Props props(final ActorRef listener, final int numLocalWorkers) {
         return Props.create(PasswordMaster.class, () -> new PasswordMaster(listener, numLocalWorkers));
@@ -54,8 +54,8 @@ public class PasswordMaster extends AbstractLoggingActor {
     @Override
     public void postStop() throws Exception {
         super.postStop();
-        this.listener.tell(PoisonPill.getInstance(), this.getSelf());
-        this.log().info("Stopped {}.", this.getSelf());
+        this.listener.tell(PoisonPill.getInstance(), getSelf());
+        log().info("Stopped {}.", getSelf());
     }
 
     @Override
@@ -70,13 +70,13 @@ public class PasswordMaster extends AbstractLoggingActor {
                 .match(PasswordFoundMessage.class, this::handle)
                 .match(ShutdownMessage.class, this::handle)
                 .match(Terminated.class, this::handle)
-                .matchAny(m -> this.log().info("%s received unknown message: %s", this.getClass().getName(), m))
+                .matchAny(m -> log().info("{} received unknown message: {}", getClass().getName(), m))
                 .build();
     }
 
     private void handle(PasswordListMessage message) {
-        if (!this.isAcceptingRequests) {
-            this.log().warning("Discarding request {}", message);
+        if (!isAcceptingRequests) {
+            log().warning("Discarding request {}", message);
             return;
         }
        schedulingStrategy.schedule(message.getPasswordHashes());
@@ -100,7 +100,7 @@ public class PasswordMaster extends AbstractLoggingActor {
     private void handle(Terminated message) {
         ActorRef sender = getSender();
         schedulingStrategy.removeWorker(sender);
-        this.log().warning("{} has terminated.", sender);
+        log().warning("{} has terminated", sender);
         if (hasFinished()) {
             stopSelfAndListener();
         }

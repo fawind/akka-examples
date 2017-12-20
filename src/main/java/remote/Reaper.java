@@ -31,13 +31,13 @@ public class Reaper extends AbstractLoggingActor {
     @Override
     public void preStart() throws Exception {
         super.preStart();
-        log().info("Started {}", this.getSelf());
+        log().info("Started {}", getSelf());
     }
 
     @Override
     public void postStop() throws Exception {
         super.postStop();
-        this.log().info("Stopped {}", this.getSelf());
+        log().info("Stopped {}", getSelf());
     }
 
     @Override
@@ -45,28 +45,28 @@ public class Reaper extends AbstractLoggingActor {
         return receiveBuilder()
                 .match(WatchMeMessage.class, this::handle)
                 .match(Terminated.class, this::handle)
-                .matchAny(m -> this.log().error("%s received unknown message: %s", this.getClass().getName(), m))
+                .matchAny(m -> log().error("{} received unknown message: {}", getClass().getName(), m))
                 .build();
     }
 
     private void handle(WatchMeMessage message) {
-        final ActorRef sender = this.getSender();
-        if (this.watchees.add(sender)) {
-            this.getContext().watch(sender);
-            this.log().info("Started watching {}.", sender);
+        final ActorRef sender = getSender();
+        if (watchees.add(sender)) {
+            getContext().watch(sender);
+            log().info("Started watching {}", sender);
         }
     }
 
     private void handle(Terminated message) {
-        final ActorRef sender = this.getSender();
-        if (this.watchees.remove(sender)) {
-            this.log().info("Reaping {}.", sender);
-            if (this.watchees.isEmpty()) {
-                this.log().info("Every local actor has been reaped. Terminating the actor system...");
-                this.getContext().getSystem().terminate();
+        final ActorRef sender = getSender();
+        if (watchees.remove(sender)) {
+            log().info("Reaping {}.", sender);
+            if (watchees.isEmpty()) {
+                log().info("Every local actor has been reaped. Terminating the actor system...");
+                getContext().getSystem().terminate();
             }
         } else {
-            this.log().error("Got termination message from unwatched {}.", sender);
+            log().error("Got termination message from unwatched {}", sender);
         }
     }
 }

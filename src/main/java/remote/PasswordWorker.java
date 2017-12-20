@@ -25,25 +25,25 @@ public class PasswordWorker extends AbstractLoggingActor {
     @Override
     public void postStop() throws Exception {
         super.postStop();
-        this.log().info("Stopped {}.", this.getSelf());
+        log().info("Stopped {}", getSelf());
     }
 
     @Override
     public Receive createReceive() {
         return receiveBuilder()
                 .match(PasswordRangeMessage.class, this::handle)
-                .matchAny(m -> this.log().info("%s received unknown message: %s", this.getClass().getName(), m))
+                .matchAny(m -> log().info("{} received unknown message: {}", getClass().getName(), m))
                 .build();
     }
 
     private void handle(PasswordRangeMessage message) {
-        this.log().info("Start checking hashes from %d to %d", message.getStartNumber(), message.getStartNumber());
+        log().info("Start checking hashes from {} to {}", message.getStartNumber(), message.getStartNumber());
         ImmutableSet<String> passwordHashes = message.getPasswordHashes();
         new PasswordRange(message.getStartNumber(), message.getEndNumber())
                 .forEachRemaining(number -> {
                     String hashedNumber = getHash(number);
                     if (passwordHashes.contains(hashedNumber)) {
-                        this.getSender().tell(new PasswordFoundMessage(number, hashedNumber), this.getSelf());
+                        getSender().tell(new PasswordFoundMessage(number, hashedNumber), getSelf());
                     }
                 });
     }
