@@ -51,10 +51,11 @@ public class Main {
     }
 
     private static void startPasswordCracker(Parameters parameters, ImmutableList<Student> students) {
+        log.info("Starting password cracker");
         PasswordCracker.runMaster(students, parameters.getNumLocalWorkers());
     }
 
     private static void startGeneAnalysis(Parameters parameters, ImmutableList<Student> students) {
-
+        log.info("Starting gene analyzer");
     }
 }
