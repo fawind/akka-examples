@@ -9,8 +9,7 @@ import akka.actor.SupervisorStrategy;
 import akka.actor.Terminated;
 import akka.japi.pf.DeciderBuilder;
 import remote.messages.PasswordFoundMessage;
-import remote.messages.PasswordListMessage;
-import remote.messages.PasswordRangeMessage;
+import remote.messages.PasswordHashListMessage;
 import remote.messages.ShutdownMessage;
 import remote.scheduling.PasswordSchedulingStrategy;
 import scala.concurrent.duration.Duration;
@@ -66,7 +65,7 @@ public class PasswordMaster extends AbstractLoggingActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(PasswordListMessage.class, this::handle)
+                .match(PasswordHashListMessage.class, this::handle)
                 .match(PasswordFoundMessage.class, this::handle)
                 .match(ShutdownMessage.class, this::handle)
                 .match(Terminated.class, this::handle)
@@ -74,7 +73,7 @@ public class PasswordMaster extends AbstractLoggingActor {
                 .build();
     }
 
-    private void handle(PasswordListMessage message) {
+    private void handle(PasswordHashListMessage message) {
         if (!isAcceptingRequests) {
             log().warning("Discarding request {}", message);
             return;

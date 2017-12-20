@@ -13,7 +13,7 @@ import utils.PasswordRange;
 public class PasswordWorker extends AbstractLoggingActor {
 
     public static Props props() {
-        return Props.create(Worker.class);
+        return Props.create(PasswordWorker.class);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class PasswordWorker extends AbstractLoggingActor {
     }
 
     private void handle(PasswordRangeMessage message) {
-        log().info("Start checking hashes from {} to {}", message.getStartNumber(), message.getStartNumber());
+        log().info("Start checking hashes from {} to {}", message.getStartNumber(), message.getEndNumber());
         ImmutableSet<String> passwordHashes = message.getPasswordHashes();
         new PasswordRange(message.getStartNumber(), message.getEndNumber())
                 .forEachRemaining(number -> {

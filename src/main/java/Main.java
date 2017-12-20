@@ -4,6 +4,7 @@ import configuration.Commands.MasterCommand;
 import configuration.Commands.SlaveCommand;
 import model.Student;
 import model.StudentCsvReader;
+import remote.PasswordCracker;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -46,7 +47,8 @@ public class Main {
         }
         try {
             ImmutableList<Student> students = StudentCsvReader.fromCsv(Paths.get(masterCommand.getPath()));
-            System.out.println(students);
+            PasswordCracker.runMaster(
+                    masterCommand.getHost(), masterCommand.getPort(), masterCommand.getNumLocalWorkers(), students);
         } catch (IOException e) {
             e.printStackTrace();
         }
