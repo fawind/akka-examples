@@ -77,7 +77,11 @@ public class GeneMaster extends AbstractLoggingActor {
     }
 
     private void handle(GeneTupleSubstringMessage message) {
+        schedulingStrategy.finishTask();
         listener.tell(message, getSelf());
+        if (hasFinished()) {
+            stopSelfAndListener();
+        }
     }
 
     private void handle(Terminated message) {
@@ -90,7 +94,8 @@ public class GeneMaster extends AbstractLoggingActor {
     }
 
     private boolean hasFinished() {
-        return schedulingStrategy.getNumberOfWorkers() <= 0;
+        return schedulingStrategy.getNumberOfWorkers() <= 0 ||
+                !schedulingStrategy.hasPendingTasks();
     }
 
     private void stopSelfAndListener() {

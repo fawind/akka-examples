@@ -1,6 +1,4 @@
-package utils;
-
-import model.Student;
+package model;
 
 import java.util.Objects;
 

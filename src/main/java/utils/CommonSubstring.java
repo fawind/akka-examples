@@ -7,15 +7,15 @@ public class CommonSubstring {
         int maxLength = 0;
         for (int i = 0; i < stringA.length(); i++) {
             for (int j = 0; j < stringB.length(); j++) {
-                int x = 0;
-                while (stringA.charAt(i + x) == stringB.charAt(j + x)) {
-                    x++;
-                    if (i + x >= stringA.length() || j + x >= stringB.length()) {
+                int offset = 0;
+                while (stringA.charAt(i + offset) == stringB.charAt(j + offset)) {
+                    offset++;
+                    if (i + offset >= stringA.length() || j + offset >= stringB.length()) {
                         break;
                     }
                 }
-                if (x > maxLength) {
-                    maxLength = x;
+                if (offset > maxLength) {
+                    maxLength = offset;
                     startIndex = i;
                 }
             }

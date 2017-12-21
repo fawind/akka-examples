@@ -9,11 +9,11 @@ import akka.actor.SupervisorStrategy;
 import akka.actor.Terminated;
 import akka.japi.pf.DeciderBuilder;
 import remote.Reaper;
+import remote.passwords.PasswordSchedulingStrategy;
 import remote.passwords.messages.PasswordFoundMessage;
 import remote.passwords.messages.PasswordHashListMessage;
 import remote.passwords.messages.PasswordRangeCompleted;
 import remote.shared.ShutdownMessage;
-import remote.passwords.PasswordSchedulingStrategy;
 import scala.concurrent.duration.Duration;
 
 import java.util.concurrent.TimeUnit;

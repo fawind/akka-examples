@@ -3,10 +3,7 @@ package configuration;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 
 import static java.lang.String.format;
@@ -19,8 +16,8 @@ public class Commands {
         GENES;
 
         public static Task fromString(String code) {
-            for(Task task : Task.values()) {
-                if(task.toString().equalsIgnoreCase(code)) {
+            for (Task task : Task.values()) {
+                if (task.toString().equalsIgnoreCase(code)) {
                     return task;
                 }
             }
@@ -47,7 +44,7 @@ public class Commands {
         private String path;
 
         @Parameter(names = {"-w", "--workers"}, description = "Number of workers to start locally.")
-        private int numLocalWorkers = 2;
+        private int numLocalWorkers = 4;
 
         @Parameter(names = {"-t", "--task"}, converter = TaskConverter.class,
                 description = "Which task to work on. Works on all tasks if omitted.")
