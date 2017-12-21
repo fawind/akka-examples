@@ -69,7 +69,6 @@ public class PasswordMaster extends AbstractLoggingActor {
                 .match(PasswordHashListMessage.class, this::handle)
                 .match(PasswordFoundMessage.class, this::handle)
                 .match(PasswordRangeCompleted.class, this::handle)
-                .match(ShutdownMessage.class, this::handle)
                 .match(Terminated.class, this::handle)
                 .matchAny(m -> log().info("{} received unknown message: {}", getClass().getName(), m))
                 .build();
@@ -85,12 +84,6 @@ public class PasswordMaster extends AbstractLoggingActor {
 
     private void handle(PasswordRangeCompleted message) {
         schedulingStrategy.removeWorker(sender());
-        if (hasFinished()) {
-            stopSelfAndListener();
-        }
-    }
-
-    private void handle(ShutdownMessage message) {
         if (hasFinished()) {
             stopSelfAndListener();
         }

@@ -26,16 +26,16 @@ public class PasswordSchedulingStrategy {
 	        if (i == this.numberOfWorkers - 1) {
 	            endNumber = (int) maxPassword;
             }
-            this.workerRouter.route(new PasswordRangeMessage(startNumber, endNumber, passwordHashes), this.master);
+            workerRouter.route(new PasswordRangeMessage(startNumber, endNumber, passwordHashes), this.master);
         }
 	}
 
-	public void addWorker(final ActorRef worker) {
+	public void addWorker(ActorRef worker) {
 	    numberOfWorkers++;
-	    workerRouter= workerRouter.addRoutee(worker);
+	    workerRouter = workerRouter.addRoutee(worker);
 	}
 
-	public void removeWorker(final ActorRef worker) {
+	public void removeWorker(ActorRef worker) {
 	    numberOfWorkers--;
 	    workerRouter = workerRouter.removeRoutee(worker);
 	}

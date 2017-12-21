@@ -6,6 +6,7 @@ import model.StudentCsvReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import remote.PasswordCracker;
+import remote.genes.GeneAnalyzer;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -57,5 +58,6 @@ public class Main {
 
     private static void startGeneAnalysis(Parameters parameters, ImmutableList<Student> students) {
         log.info("Starting gene analyzer");
+        GeneAnalyzer.runMaster(students, parameters.getNumLocalWorkers());
     }
 }

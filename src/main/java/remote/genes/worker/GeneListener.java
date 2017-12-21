@@ -28,6 +28,7 @@ public class GeneListener extends AbstractLoggingActor {
     private final Map<Student, GenePartner> genePartners = new HashMap<>();
     private final ImmutableList<Student> students;
     private final ImmutableMap<String, Student> geneToStudent;
+    private long count = 0;
 
     public GeneListener(ImmutableList<Student> students) {
         this.students = students;
@@ -65,6 +66,11 @@ public class GeneListener extends AbstractLoggingActor {
             genePartners.put(studentA, newGenePartner);
             genePartners.put(studentB, newGenePartner);
         }
+        count++;
+        if (count % 10 == 0) {
+            log().info("Tuple Count: {}", count);
+        }
+
     }
 
     private void handle(ShutdownMessage message) {
@@ -72,7 +78,7 @@ public class GeneListener extends AbstractLoggingActor {
     }
 
     private boolean hasLargerGeneSubstring(Student studentA, Student studentB, String substring) {
-        return genePartners.containsKey(studentA) ||
+        return genePartners.containsKey(studentA) &&
                 genePartners.get(studentA).getGeneMatchLength() < substring.length();
     }
 
@@ -81,6 +87,7 @@ public class GeneListener extends AbstractLoggingActor {
         students.forEach(student -> {
             if (!genePartners.containsKey(student)) {
                 log().error("No gene pair found for student {}", student);
+                return;
             }
             GenePartner genePartner = genePartners.get(student);
             stringBuilder.append(format("\n%d, %s, %s, %s",student.getId(), student.getName(),
