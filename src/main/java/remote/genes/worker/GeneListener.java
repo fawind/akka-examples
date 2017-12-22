@@ -86,7 +86,7 @@ public class GeneListener extends AbstractLoggingActor {
             }
             GenePartner genePartner = genePartners.get(student);
             stringBuilder.append(format("\n%d, %s, %s, %s",student.getId(), student.getName(),
-                    genePartner.getOtherStudent(student), genePartner.getGeneMatch()));
+                    genePartner.getOtherStudent(student).getId(), genePartner.getGeneMatch()));
         });
         log().info("Gene Match Results:" + stringBuilder.toString());
     }

@@ -18,7 +18,8 @@ Akka hands-on exercise for the lecture [Distributed Data Analytics](https://hpi.
 
 ## Usage
 
-1. Build the jar or run from inside your IDE.
+1. Build a fatjar using `gradle shadowJar` or run from inside your IDE.
 2. Run the [main method](https://github.com/fawind/akka-example/blob/master/src/main/java/Main.java) with the following program arguments:
     * `--path <path to students.csv>` - Path to the input csv file. Required.
     * `--task [passwords|genes|all]` - Which task to run. Optional, defaults to `all`.
+    * `--workers <number of local workers>` - Number of workers to spawn locally. Optional, defaults to `4`.

@@ -1,7 +1,19 @@
 group 'de.hpi'
 version '1.0-SNAPSHOT'
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = 'Main'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 sourceCompatibility = 1.8
 
@@ -25,4 +37,10 @@ dependencies {
     testCompile 'org.assertj:assertj-core:3.8.+'
     testCompile 'org.mockito:mockito-core:2.+'
     testCompile 'com.typesafe.akka:akka-testkit_2.11:2.5.3'
+}
+
+shadowJar {
+    transform(com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer) {
+        resource = 'reference.conf'
+    }
 }
