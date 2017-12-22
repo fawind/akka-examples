@@ -40,8 +40,8 @@ public class Commands {
 
     public static class Parameters {
 
-        @Parameter(names = {"--path"}, required = true, description = "Path of the input csv file.")
-        private String path;
+        @Parameter(names = {"--path"}, description = "Path of the input csv file.")
+        private String path = "./students.csv";
 
         @Parameter(names = {"-w", "--workers"}, description = "Number of workers to start locally.")
         private int numLocalWorkers = 4;
