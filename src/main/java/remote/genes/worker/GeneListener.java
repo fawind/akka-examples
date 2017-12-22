@@ -60,22 +60,19 @@ public class GeneListener extends AbstractLoggingActor {
     private void handle(GeneTupleSubstringMessage message) {
         Student studentA = geneToStudent.get(message.getGeneA());
         Student studentB = geneToStudent.get(message.getGeneB());
-        if (hasLargerGeneSubstring(studentA, studentB, message.getLongestSubstring()) ) {
-            GenePartner newGenePartner = new GenePartner(studentA, studentB, message.getLongestSubstring());
-            genePartners.put(studentA, newGenePartner);
-            genePartners.put(studentB, newGenePartner);
-        }
+        updateGenePartner(studentA, studentB, message.getLongestSubstring());
+        updateGenePartner(studentB, studentA, message.getLongestSubstring());
     }
 
     private void handle(ShutdownMessage message) {
         getSelf().tell(PoisonPill.getInstance(), getSelf());
     }
 
-    private boolean hasLargerGeneSubstring(Student studentA, Student studentB, String substring) {
-        return !genePartners.containsKey(studentA) ||
-                !genePartners.containsKey(studentB) ||
-                genePartners.get(studentA).getGeneMatchLength() < substring.length() ||
-                genePartners.get(studentB).getGeneMatchLength() < substring.length();
+    private void updateGenePartner(Student subject, Student partner, String substring) {
+        if (!genePartners.containsKey(subject) ||
+                genePartners.get(subject).getGeneMatchLength() < substring.length()) {
+            genePartners.put(subject, new GenePartner(subject, partner, substring));
+        }
     }
 
     private void printResults() {
