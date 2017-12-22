@@ -52,12 +52,12 @@ public class Main {
     }
 
     private static void startPasswordCracker(Parameters parameters, ImmutableList<Student> students) {
-        log.info("Starting password cracker");
+        log.info("Starting password cracker with {} local worker", parameters.getNumLocalWorkers());
         PasswordCracker.runMaster(students, parameters.getNumLocalWorkers());
     }
 
     private static void startGeneAnalysis(Parameters parameters, ImmutableList<Student> students) {
-        log.info("Starting gene analyzer");
+        log.info("Starting gene analyzer with {} local worker", parameters.getNumLocalWorkers());
         GeneAnalyzer.runMaster(students, parameters.getNumLocalWorkers());
     }
 }
